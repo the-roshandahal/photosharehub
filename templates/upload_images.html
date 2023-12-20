@@ -10,6 +10,11 @@
                         <h1>Upload Images</h1>
                         <form id="contact-form" action="{% url 'upload_images' event.event_credentials %}" method ="POST" enctype="multipart/form-data">
                             {% csrf_token %}
+                            {% if request.user.is_authenticated %}
+                            <input name="name" id="name" type="text" placeholder="Your Name" required value="{{request.user.first_name}} {{request.user.last_name}}">
+                            {% else %}
+                            <input name="name" id="name" type="text" placeholder="Your Name" required>
+                            {% endif %}
                             <input name="name" id="name" type="text" placeholder="Your Name" required>
                             <input name="folder_name" id="name" type="text" placeholder="Album Name" required>
                             <input type="file" name="images" accept="image/*" multiple required>
