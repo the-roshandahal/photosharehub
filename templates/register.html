@@ -7,12 +7,16 @@
             <div class="row">
                 <div class="col-md-8 mx-auto">
                     <div class="">
-                        <h1>Login</h1>
-                        <form id="contact-form" action="{% url 'user_login' %}" method ="POST">
+                        <h1>Register</h1>
+                        <form id="contact-form" action="{% url 'register' %}" method ="POST">
                             {% csrf_token %}
+                            <input name="first_name" id="name" type="text" placeholder="First Name" required>
+                            <input name="last_name" id="name" type="text" placeholder="Last Name" required>
+                            <input name="email" id="name" type="text" placeholder="Email" required>
+                            <input name="phone_number" id="name" type="text" placeholder="Phone Number" required>
                             <input name="username" id="name" type="text" placeholder="Username" required>
                             <input name="password" id="name" type="password" placeholder="Password" required>
-                            <button class="active-button">Login</button>
+                            <button class="active-button">Register</button>
         
                             <div id="msg" class="message"></div>
                         </form>

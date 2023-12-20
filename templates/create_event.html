@@ -1,0 +1,26 @@
+{% load static %}{% include 'header.html'   %}
+<div id="content" class="with-paddings ">
+
+
+    <section class="single-product-section" style="margin: 50px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="">
+                        <h1>Event Details</h1>
+                        <form id="contact-form" action="{% url 'create_event' %}" method ="POST">
+                            {% csrf_token %}
+                            <input name="event_name" id="name" type="text" placeholder="Event Title" required>
+                            <input name="location" id="name" type="text" placeholder="Event Location">
+                            <input name="remarks" id="name" type="text" placeholder="Remarks">
+                            <button class="active-button">Create</button>
+        
+                            <div id="msg" class="message"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% include 'footer.html'   %}

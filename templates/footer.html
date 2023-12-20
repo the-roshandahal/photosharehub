@@ -3,9 +3,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6">
-                <p>Copyright © 2015 by Upifix. Made with Love.</p>
+                <p>Copyright © 2024. Roshan Dahal</p>
             </div>
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
                 <ul class="social-icons">
                     <li><a href="#">facebook</a></li>
                     <li><a href="#">twitter</a></li>
@@ -14,7 +14,7 @@
                     <li><a href="#">instagram</a></li>
                     <li><a href="#">flickr</a></li>
                 </ul>
-            </div>
+            </div> -->
         </div>
     </div>
 </footer>
@@ -49,6 +49,7 @@
 <script type="text/javascript" src="{% static 'js/extensions/revolution.extension.parallax.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/extensions/revolution.extension.slideanims.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/extensions/revolution.extension.video.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.flexslider.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 
@@ -128,6 +129,17 @@ tpj(document).ready(function() {
         });
     }
 });	/*ready*/
+</script>
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var messagesPopup = document.getElementById('messages-popup');
+        if (messagesPopup) {
+            messagesPopup.style.display = 'block';
+            setTimeout(function() {
+                messagesPopup.style.display = 'none';
+            }, 3000);
+        }
+    }); 
 </script>
 
 </body>

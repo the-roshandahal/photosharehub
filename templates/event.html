@@ -1,0 +1,54 @@
+{% load static %}{% include 'header.html'   %}
+<div id="content">
+
+  <!-- page-title section -->
+  <section class="page-title-section">
+    <div class="container">
+      <ul class="page-pag">
+        <li><a href="#">{{event.created}}</a></li>
+      </ul>
+      <h1  style="margin-bottom:20px;">{{event.event_name}}</h1>
+      <a href="{% url 'upload_images' event_credentials=event.event_credentials %}"><button class="active-button">Upload Images</button></a>
+
+    </div>
+  </section>
+  <!-- End page-title section -->
+
+  <!-- blog section -->
+  <section class="blog-section border-tp">
+    <div class="container">
+      <div class="inner-blog">
+        <div class="blog-box">
+          <div class="row">
+            {% for folder in folders %}
+              
+            <div class="col-md-4">
+              <div class="blog-post">
+                <div class="post-gallery">
+                  <div class="flexslider">
+                    <ul class="slides">
+                      {% for photo in folder.first_three_photos %}
+                      <li style="width: 100%; float: left; margin-right: -100%; position: relative; display: none;" class="">
+                        <img src="{{ photo.image.url }}" alt="" style="height: 250px;  object-fit: fill;">
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  <ol class="flex-control-nav flex-control-paging"><li><a class="">1</a></li><li><a class="flex-active">2</a></li><li><a class="">3</a></li></ol><ul class="flex-direction-nav"><li><a class="flex-prev" href="#"></a></li><li><a class="flex-next" href="#"></a></li></ul></div>
+                </div>
+                <div class="post-content">
+                  <span>{{folder.created_by}}</span>
+                  <h2><a href="{% url 'folder_detail' folder_credentials=folder.folder_credentials %}">{{folder.folder_name}}</a></h2>
+                  <span>{{folder.created}}</span>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End blog section -->
+</div>
+  {% include 'footer.html'   %}

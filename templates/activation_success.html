@@ -1,0 +1,15 @@
+{% include 'header.html'   %}
+<div id="content">
+    <section class="error-section" style="min-height: 724px;">
+        <div class="error-content">
+            <div class="container">
+                <span>SUCCESS</span>
+                <h1>Account Activated, Proceed to Login</h1>
+                <a href="{% url 'user_login' %}" style="margin-top:20px;"><button class="inactive-button">Login</button></a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+{% include 'footer.html'   %}

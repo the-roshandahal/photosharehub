@@ -46,6 +46,7 @@
   width: 100%;
   margin-bottom: 0;
   padding: 0 35px;
+  position: sticky;
 }
 .navbar-nav.navbar-right {
   position: relative;
@@ -4266,6 +4267,8 @@ form#contact-form input[type="text"],
 form#review-form input[type="text"],
 form#contact-form input[type="password"],
 form#review-form input[type="password"],
+form#contact-form input[type="file"],
+form#review-form input[type="file"],
 form#contact-form textarea,
 form#review-form textarea {
   width: 100%;

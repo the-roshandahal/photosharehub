@@ -1,53 +1,55 @@
 {% load static %}{% include 'header.html' %}
 <div id="content">
-
     <section class="main-title">
         <div class="container">
             <h1>Hello</h1>
             <h2>Welcome to photo share hub</h2>
         </div>
     </section>
-
-
     <!-- services section -->
     <section class="services-section">
         <div class="container">
             <h1 class="services-title">
                 We simplify the process of capturing and sharing <br>moments with your loved ones.
             </h1>
-            <div class="services-box">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="services-post">
-                            <h2><span>01/</span> Photography</h2>
-                            <p>Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="services-post">
-                            <h2><span>02/</span> Branding</h2>
-                            <p>Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="services-post">
-                            <h2><span>03/</span> Web Design</h2>
-                            <p>Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="services-post">
-                            <h2><span>04/</span> Support</h2>
-                            <p>Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="button-container" style="margin-bottom:50px;">
+                <a href="{% url 'user_login' %}" style="margin-right:20px;"><button class="active-button">Login</button></a>
+                <a href="{% url 'user_login' %}"><button class="inactive-button">Sign Up</button></a>
+              </div>
+            
             <!-- <div class="center-button">
                 <a href="#">Discover Us</a>
             </div> -->
         </div>
     </section>
     <!-- End services section -->
+    <section class="testimonial-section">
+        <div class="container">
+            <div class="services-box" style="color:white; padding:20px 0 20px 0;">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="services-post">
+                            <h2><span>01/</span> Click</h2>
+                            <p style="color:white;">Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="services-post">
+                            <h2><span>02/</span> Scan</h2>
+                            <p style="color:white;">Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="services-post">
+                            <h2><span>03/</span> Share</h2>
+                            <p style="color:white;">Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+    </section>
 </div>
 {% include 'footer.html' %}

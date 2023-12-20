@@ -1,0 +1,24 @@
+{% load static %}{% include 'header.html'   %}
+<div id="content" class="with-paddings ">
+
+
+    <section class="single-product-section" style="margin: 50px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="">
+                        <h1>Upload Images</h1>
+                        <form id="contact-form" action="{% url 'upload_images' event.event_credentials %}" method ="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input name="name" id="name" type="text" placeholder="Your Name" required>
+                            <input name="folder_name" id="name" type="text" placeholder="Album Name" required>
+                            <input type="file" name="images" accept="image/*" multiple required>
+                            <button class="active-button">Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% include 'footer.html'   %}
