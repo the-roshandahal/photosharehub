@@ -1,4 +1,4 @@
-
+{% load static %}
 <footer>
     <div class="container-fluid">
         <div class="row">
@@ -19,50 +19,44 @@
     </div>
 </footer>
 
-<!-- Right sidebar -->
-<div id="right-sidebar">
-    <div class="inner-sidebar">
-        <a class="close-sidebar" href=""></a>
-        <div class="sidebar-widget search-widget">
-            <h2>Search</h2>
-            <form class="search-sidebar">
-                <input type="search" name="search" id="search-side" placeholder="search:"/>
-                <button type="submit"><i class="fa fa-search"></i></button>
-            </form>
-        </div>
-        <div class="sidebar-widget about-widget">
-            <img src="upload/others/ab.jpg" alt="">
-            <h2>About The Photofolio</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In maximus ligula semper metus pellentesque mattis. </p>
-        </div>
-        <div class="sidebar-widget subscribe-widget">
-            <h2>Subscribe to Our Newsletter</h2>
-            <p>If you want to receive monthly updates from us just pop your email in the box.</p>
-            <form class="subscribe">
-                <input type="text" name="email_address2" id="email_address2" placeholder="your email address:"/>
-                <button type="submit"><i class="fa fa-arrow-circle-o-right"></i></button>
-            </form>
-        </div>
-        <div class="sidebar-widget instagram-widget">
-            <h2>Instagram gallery</h2>
-            <ul class="instagram-list">
-                <li><a href="#"><img src="upload/instagram/1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="upload/instagram/2.jpg" alt=""></a></li>
-                <li><a href="#"><img src="upload/instagram/3.jpg" alt=""></a></li>
-                <li><a href="#"><img src="upload/instagram/4.jpg" alt=""></a></li>
-                <li><a href="#"><img src="upload/instagram/5.jpg" alt=""></a></li>
-                <li><a href="#"><img src="upload/instagram/6.jpg" alt=""></a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-<!-- End Right sidebar -->
-
 </div>
 <!-- End Container -->
 
 <!-- END REVOLUTION SLIDER -->
+
+
+
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.migrate.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.imagesloaded.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/jquery.isotope.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/waypoint.min.js' %}"></script>
+    
+<!-- REVOLUTION JS FILES -->
+<script type="text/javascript" src="{% static 'js/jquery.themepunch.tools.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.themepunch.revolution.min.js' %}"></script>
+
+<!-- SLIDER REVOLUTION 5.0 EXTENSIONS  
+    (Load Extensions only on Local File Systems !  
+    The following part can be removed on Server for On Demand Loading) -->	
+<script type="text/javascript" src="{% static 'js/extensions/revolution.extension.actions.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/extensions/revolution.extension.carousel.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/extensions/revolution.extension.kenburn.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/extensions/revolution.extension.layeranimation.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/extensions/revolution.extension.migration.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/extensions/revolution.extension.navigation.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/extensions/revolution.extension.parallax.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/extensions/revolution.extension.slideanims.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/extensions/revolution.extension.video.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+
+
+
+
 <script type="text/javascript">
+    
 var tpj=jQuery;			
 var revapi4;
 tpj(document).ready(function() {
