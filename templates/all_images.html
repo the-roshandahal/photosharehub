@@ -1,0 +1,81 @@
+{% load static %}
+{% include 'header.html'   %}
+<div id="content">
+
+    <section class="single-project-section">
+        <div class="single-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="title-post">
+                            <h1>{{event.event_name}}</h1>
+                            <ul class="project-tags">
+                                <li><a href="#">{{event.created}}</a></li>
+                            </ul>
+                            <a class="likes" href="#">{{photo_count}} <i class="fa fa-image"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+
+
+            <style>
+                .custom-row {
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin: -10px; /* Adjust margin as needed */
+                }
+            
+                .custom-col {
+                    flex: 0 0 calc(100% / 2); /* 2 images in a row on mobile */
+                    box-sizing: border-box;
+                    padding: 10px; /* Adjust padding as needed */
+                }
+            
+                @media (min-width: 576px) {
+                    .custom-col {
+                        flex: 0 0 calc(100% / 3); /* 3 images in a row on tablets */
+                    }
+                }
+            
+                @media (min-width: 768px) {
+                    .custom-col {
+                        flex: 0 0 calc(100% / 4); /* 4 images in a row on laptops */
+                    }
+                }
+            </style>
+            
+            <div class="custom-row">
+                {% for photo in photos %}
+                    <div class="custom-col" data-toggle="modal" data-target="#previewModal{{ forloop.counter }}" >
+                        <img src="{{ photo.image.url }}" alt="" style="height: 200px;  object-fit: cover;">
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="previewModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="previewModalLabel">Image Preview</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="{{ photo.image.url }}" class="img-fluid" alt="Full Preview">
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{{ photo.image.url }}" download="image.jpg" class="btn btn-primary">Download</a>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+</div>
+{% include 'footer.html'   %}

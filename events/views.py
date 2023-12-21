@@ -58,7 +58,7 @@ def dashboard(request):
             'event_credentials_b64': event_credentials_b64,
             'secret_token_b64': secret_token_b64,
         })
-
+    messages.success(request, 'Hi')
     context = {
         'event_qrcodes': event_qrcodes,
     }
@@ -259,3 +259,12 @@ def saved_events(request, id):
         'events_with_num_images': events_with_num_images,
     }
     return render(request, 'saved_events.html', context)
+
+def all_images(request, event_credentials):
+    event = Event.objects.get(event_credentials=event_credentials)
+    folders = Folder.objects.filter(event=event)
+    photos = Photo.objects.filter(folder__in=folders)
+    photo_count = photos.count()
+    return render(request, 'all_images.html', {'event':event, 'photos': photos, 'photo_count': photo_count})
+
+

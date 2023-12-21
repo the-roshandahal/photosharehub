@@ -16,6 +16,7 @@ urlpatterns = [
     path('folder_detail/<str:folder_credentials>/', views.folder_detail, name='folder_detail'),
     path('save_event/<str:event_credentials>', views.save_event, name='save_event'),
     path('unsave_event/<str:event_credentials>', views.unsave_event, name='unsave_event'),
+    path('all_images/<str:event_credentials>', views.all_images, name='all_images'),
     path('saved_events/<int:id>', views.saved_events, name='saved_events'),
 
 
