@@ -1,18 +1,26 @@
+from features.models import *
 from django.http import HttpResponse
-from django.utils.http import urlsafe_base64_decode
+
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
 from django.db.models import Count
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_str
 import base64
-import qrcode
-from io import BytesIO
-from django.http import HttpResponse
 from .models import *
+from PIL import Image
+
+
+from io import BytesIO
+from PIL import Image
+import qrcode
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_decode
+from .models import Event
 from django.contrib.auth.decorators import login_required
+
+
 
 @login_required
 def dashboard(request):
@@ -94,26 +102,69 @@ def event(request, event_credentials, secret_token):
 
 
 
+# @login_required
+# def download_qr_code(request, event_credentials, secret_token):
+#     event = get_object_or_404(Event, event_credentials=urlsafe_base64_decode(event_credentials).decode(),
+#                                secret_token=urlsafe_base64_decode(secret_token).decode())
+    
+#     company = Company.objects.all().order_by('-created').first()
+#     # here is the company logo iwant in the center of qr code 
+#     logo = company.logo
 
+#     qr = qrcode.QRCode(
+#         version=1,
+#         error_correction=qrcode.constants.ERROR_CORRECT_L,
+#         box_size=10,
+#         border=4,
+#     )
+#     event_url = f"{request.scheme}://{request.get_host()}{reverse('event', args=[event.event_credentials, event.secret_token])}"
 
+#     qr.add_data(event_url)
+#     qr.make(fit=True)
+
+#     buffer = BytesIO()
+#     qr_img = qr.make_image(fill_color="black", back_color="white")
+#     qr_img.save(buffer, format="PNG")
+#     image_data = buffer.getvalue()
+
+#     response = HttpResponse(image_data, content_type='image/png')
+#     response['Content-Disposition'] = f'attachment; filename="{event.event_name}_qr_code.png"'
+
+#     return response
 @login_required
 def download_qr_code(request, event_credentials, secret_token):
     event = get_object_or_404(Event, event_credentials=urlsafe_base64_decode(event_credentials).decode(),
                                secret_token=urlsafe_base64_decode(secret_token).decode())
     
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
+    company = Company.objects.all().order_by('-created').first()
+    logo_path = company.qr_logo.path  # Assuming 'qr_logo' is an ImageField in your Company model
     event_url = f"{request.scheme}://{request.get_host()}{reverse('event', args=[event.event_credentials, event.secret_token])}"
 
+    basewidth = 100
+    
+    # Resize the logo
+    logo = Image.open(logo_path)
+    wpercent = (basewidth / float(logo.size[0]))
+    hsize = int((float(logo.size[1]) * float(wpercent)))
+    logo = logo.resize((basewidth, hsize), Image.ANTIALIAS)
+
+    # Generate QR code
+    qr = qrcode.QRCode(
+        error_correction=qrcode.constants.ERROR_CORRECT_H
+    )
     qr.add_data(event_url)
     qr.make(fit=True)
 
+    # Create an image from the QR code
+    qr_img = qr.make_image(fill_color="black", back_color="white").convert('RGB')
+
+    # Calculate the position to center the logo on the QR code
+    pos = ((qr_img.size[0] - logo.size[0]) // 2, (qr_img.size[1] - logo.size[1]) // 2)
+
+    # Paste the logo on the QR code
+    qr_img.paste(logo, pos)
+
     buffer = BytesIO()
-    qr_img = qr.make_image(fill_color="black", back_color="white")
     qr_img.save(buffer, format="PNG")
     image_data = buffer.getvalue()
 
@@ -121,6 +172,8 @@ def download_qr_code(request, event_credentials, secret_token):
     response['Content-Disposition'] = f'attachment; filename="{event.event_name}_qr_code.png"'
 
     return response
+
+
 
 
 @login_required
