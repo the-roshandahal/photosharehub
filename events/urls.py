@@ -16,6 +16,7 @@ urlpatterns = [
     path('folder_detail/<str:folder_credentials>/', views.folder_detail, name='folder_detail'),
     path('save_event/<str:event_credentials>', views.save_event, name='save_event'),
     path('unsave_event/<str:event_credentials>', views.unsave_event, name='unsave_event'),
+    path('saved_events/<int:id>', views.saved_events, name='saved_events'),
 
 
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),

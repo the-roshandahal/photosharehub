@@ -194,3 +194,15 @@ def unsave_event(request,event_credentials):
     saved_event.delete()
     messages.success(request, 'Event removed successfully.')
     return redirect('event', event_credentials=event.event_credentials, secret_token= event.secret_token)
+
+@login_required
+def saved_events(request, id):
+    user = get_object_or_404(User, id=id)
+    saved_events_data = SavedEvent.objects.filter(user=user)
+    events_with_num_images = Event.objects.filter(savedevent__in=saved_events_data).annotate(num_images=Count('folder__photo'))
+
+    context = {
+        'saved_events_data': saved_events_data,
+        'events_with_num_images': events_with_num_images,
+    }
+    return render(request, 'saved_events.html', context)

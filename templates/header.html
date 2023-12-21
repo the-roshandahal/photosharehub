@@ -18,7 +18,7 @@
 						{% if request.user.is_authenticated %}
 
 						<li class=""><a class="active" href="{% url 'dashboard' %}">Events</a></li>
-						<li class=""><a class="active" href="{% url 'dashboard' %}">Favourites</a></li>
+						<li class=""><a class="active" href="{% url 'saved_events' id=request.user.id %}">Favourites</a></li>
 						<li class=""><a class="active" href="{% url 'user_logout' %}">Logout</a></li>
 						{% else %}
 						<li class=""><a class="active" href="{% url 'user_login' %}">Log In</a></li>
