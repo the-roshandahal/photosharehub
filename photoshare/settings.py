@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'accounts',
     'events',
 ]
+LOGIN_URL = 'user_login'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

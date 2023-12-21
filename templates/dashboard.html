@@ -1,11 +1,16 @@
 {% load static %}{% include 'header.html'   %}
 <div id="content">
-    <section class="error-section" style="min-height: 724px;">
-        <div class="error-content">
-            <div class="container">
-                <span>Dashboard</span>
-                <h1>Welcome {{request.user.first_name}}</h1>
-                <a href="{% url 'create_event' %}" style="margin-top:20px;"><button class="inactive-button">Create Event</button></a>
+    <section class="about-banner-section">
+        <div class="container">
+            <div class="about-banner-box">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1>Welcome</h1>
+                        <h2>{{request.user.first_name}}</h2>
+                        <a href="{% url 'create_event' %}" style="margin-top:20px;"><button class="inactive-button">Create Event</button></a>
+                    </div>
+                    
+                </div>
             </div>
         </div>
     </section>

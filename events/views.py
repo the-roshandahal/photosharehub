@@ -1,11 +1,10 @@
-from django.contrib.auth import logout
-from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+from django.utils.http import urlsafe_base64_decode
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db.models import Count
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_str
 import base64
@@ -13,55 +12,52 @@ import qrcode
 from io import BytesIO
 from django.http import HttpResponse
 from .models import *
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def dashboard(request):
-    if request.user.is_authenticated:
-        events = Event.objects.annotate(num_photos=Count('folder__photo'),
-                                        num_folders=Count('folder', distinct=True)).all()
-        current_site = get_current_site(request)
+    events = Event.objects.annotate(num_photos=Count('folder__photo'),
+                                    num_folders=Count('folder', distinct=True)).all()
+    current_site = get_current_site(request)
 
-        event_qrcodes = []
-        for event_instance in events:
-            event_url = f"{request.scheme}://{current_site.domain}{reverse('event', args=[event_instance.event_credentials, event_instance.secret_token])}"
+    event_qrcodes = []
+    for event_instance in events:
+        event_url = f"{request.scheme}://{current_site.domain}{reverse('event', args=[event_instance.event_credentials, event_instance.secret_token])}"
 
-            # Encode the event credentials and secret token for use in the URL
-            event_credentials_b64 = urlsafe_base64_encode(force_str(event_instance.event_credentials).encode())
-            secret_token_b64 = urlsafe_base64_encode(force_str(event_instance.secret_token).encode())
+        # Encode the event credentials and secret token for use in the URL
+        event_credentials_b64 = urlsafe_base64_encode(force_str(event_instance.event_credentials).encode())
+        secret_token_b64 = urlsafe_base64_encode(force_str(event_instance.secret_token).encode())
 
-            # Generate a single QR code for each event
-            qr = qrcode.QRCode(
-                version=1,
-                error_correction=qrcode.constants.ERROR_CORRECT_L,
-                box_size=10,
-                border=4,
-            )
-            qr.add_data(event_url)
-            qr.make(fit=True)
+        # Generate a single QR code for each event
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(event_url)
+        qr.make(fit=True)
 
-            buffer = BytesIO()
-            qr_img = qr.make_image(fill_color="black", back_color="white")
-            qr_img.save(buffer, format="PNG")
-            qr_img_data = base64.b64encode(buffer.getvalue()).decode("utf-8")
+        buffer = BytesIO()
+        qr_img = qr.make_image(fill_color="black", back_color="white")
+        qr_img.save(buffer, format="PNG")
+        qr_img_data = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-            event_qrcodes.append({
-                'event_instance': event_instance,
-                'qr_img_data': qr_img_data,
-                'event_url': event_url,
-                'event_credentials_b64': event_credentials_b64,
-                'secret_token_b64': secret_token_b64,
-            })
+        event_qrcodes.append({
+            'event_instance': event_instance,
+            'qr_img_data': qr_img_data,
+            'event_url': event_url,
+            'event_credentials_b64': event_credentials_b64,
+            'secret_token_b64': secret_token_b64,
+        })
 
-        context = {
-            'event_qrcodes': event_qrcodes,
-        }
+    context = {
+        'event_qrcodes': event_qrcodes,
+    }
 
-        return render(request, 'dashboard.html', context)
-    else:
-        return redirect('home')
-    
+    return render(request, 'dashboard.html', context)
 
-
+@login_required
 def create_event(request):
     if request.method == 'POST':
         event_name = request.POST['event_name']
@@ -80,6 +76,10 @@ def event(request, event_credentials, secret_token):
     event = get_object_or_404(Event, event_credentials=event_credentials, secret_token=secret_token)
     folders = Folder.objects.filter(event=event).annotate(num_photos=Count('photo'))
     
+    if SavedEvent.objects.filter(event_id= event.id).exists():
+        fav = True
+    else:
+        fav = False
     for folder in folders:
         # Fetch the first three images inside the folder
         folder.first_three_photos = folder.photo_set.all()[:3]
@@ -87,6 +87,7 @@ def event(request, event_credentials, secret_token):
     context = {
         'folders': folders,
         'event': event,
+        'fav':fav
     }
     return render(request, 'event.html', context)
 
@@ -94,9 +95,8 @@ def event(request, event_credentials, secret_token):
 
 
 
-from django.http import HttpResponse
-from django.utils.http import urlsafe_base64_decode
 
+@login_required
 def download_qr_code(request, event_credentials, secret_token):
     event = get_object_or_404(Event, event_credentials=urlsafe_base64_decode(event_credentials).decode(),
                                secret_token=urlsafe_base64_decode(secret_token).decode())
@@ -123,7 +123,7 @@ def download_qr_code(request, event_credentials, secret_token):
     return response
 
 
-
+@login_required
 def delete_event(request, event_credentials):
     event = get_object_or_404(Event, event_credentials=event_credentials)
     event.delete()
@@ -167,3 +167,30 @@ def folder_detail(request, folder_credentials):
     photos = Photo.objects.filter(folder=folder)
     photo_count = photos.count()
     return render(request, 'folder_detail.html', {'folder': folder, 'photos': photos, 'photo_count':photo_count})
+
+
+
+def save_event(request,event_credentials):
+    event = Event.objects.get(event_credentials=event_credentials)
+    if request.user.is_authenticated:
+        user_obj = request.user
+        user = User.objects.get(username=user_obj)
+        if SavedEvent.objects.filter(event=event,user=user).exists():
+            messages.success(request, 'Event already exists in favourites.')
+        else:
+            SavedEvent.objects.create(event=event,user=user)
+            messages.success(request, 'Event saved successfully.')
+        return redirect('event', event_credentials=event.event_credentials, secret_token= event.secret_token)
+    else:
+        messages.success(request, 'You must login to continue.')
+        return redirect('event', event_credentials=event.event_credentials, secret_token= event.secret_token)
+
+@login_required
+def unsave_event(request,event_credentials):
+    event = Event.objects.get(event_credentials=event_credentials)
+    user_obj = request.user
+    user = User.objects.get(username=user_obj)
+    saved_event=SavedEvent.objects.get(event=event,user=user)
+    saved_event.delete()
+    messages.success(request, 'Event removed successfully.')
+    return redirect('event', event_credentials=event.event_credentials, secret_token= event.secret_token)

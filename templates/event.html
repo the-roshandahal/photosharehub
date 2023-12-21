@@ -4,10 +4,33 @@
   <!-- page-title section -->
   <section class="page-title-section">
     <div class="container">
+      {% if request.user.is_authenticated %}
+      {% else %}
+      <p>Already a user? Login to save this event for next time. <a href="{% url 'user_login' %}">Click Here</a></p>
+      {% endif %}
       <ul class="page-pag">
         <li><a href="#">{{event.created}}</a></li>
       </ul>
-      <h1  style="margin-bottom:20px;">{{event.event_name}}</h1>
+      <h1  style="margin-bottom:20px;">{{event.event_name}}
+        <span style="margin-left: 10px;">
+          {% if request.user.is_authenticated %}
+          {% if fav %}
+          <a href="{% url 'unsave_event' event_credentials=event.event_credentials %}">
+            <i class="fa fa-heart" style="color: red;"></i>
+          </a>
+          {% else %}
+          <a href="{% url 'save_event' event_credentials=event.event_credentials %}">
+            <i class="fa fa-heart-o" style="color: red;"></i>
+          </a>
+          {% endif %}
+          {% else %}
+          <a href="{% url 'save_event' event_credentials=event.event_credentials %}">
+            <i class="fa fa-heart-o" style="color: red;"></i>
+          </a>
+
+          {% endif %}
+        </span>
+      </h1>
       <a href="{% url 'upload_images' event_credentials=event.event_credentials %}"><button class="active-button">Upload Images</button></a>
 
     </div>

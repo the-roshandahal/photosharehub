@@ -85,3 +85,8 @@ class Photo(models.Model):
     uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     guest_name = models.CharField(max_length = 255, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+
+class SavedEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)

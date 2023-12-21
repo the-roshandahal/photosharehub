@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 from django.conf import settings
 from urllib.parse import quote
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == 'POST':
@@ -85,7 +86,7 @@ def user_login(request):
                 messages.error(request, 'Invalid username or password.')
 
         return render(request, 'login.html')
-
+@login_required
 def user_logout(request):
     messages.success(request, 'Successfully logged out.')
     logout(request)

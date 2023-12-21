@@ -8,6 +8,8 @@
                 <div class="col-md-8 mx-auto">
                     <div class="">
                         <h1>Register</h1>
+                        <p>Already a member? <a href="{% url 'user_login' %}">Login</a></p>
+
                         <form id="contact-form" action="{% url 'register' %}" method ="POST">
                             {% csrf_token %}
                             <input name="first_name" id="name" type="text" placeholder="First Name" required>

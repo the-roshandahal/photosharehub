@@ -8,6 +8,7 @@
                 <div class="col-md-8 mx-auto">
                     <div class="">
                         <h1>Login</h1>
+                        <p>New to photo share hub? <a href="{% url 'register' %}">Register</a></p>
                         <form id="contact-form" action="{% url 'user_login' %}" method ="POST">
                             {% csrf_token %}
                             <input name="username" id="name" type="text" placeholder="Username" required>
