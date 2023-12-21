@@ -1,105 +1,107 @@
 {% load static %}{% include 'header.html'   %}
-<div id="content">
-    <section class="about-banner-section">
-        <div class="container">
-            <div class="about-banner-box">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h1>Welcome</h1>
-                        <h2>{{request.user.first_name}}</h2>
-                        <a href="{% url 'create_event' %}" style="margin-top:20px;"><button class="inactive-button">Create Event</button></a>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-    </section>
-
-</div>
-{% if event_qrcodes %}
-    
-<div id="content" class="with-paddings" style="margin-top: 50px;">
-    
-    <!-- page-title section -->
-    <section class="page-title-section">
-        <div class="container">
-            <h1>Events</h1>
-        </div>
-    </section>
-    <!-- End page-title section -->
-    
-    <!-- shopping-cart-section 
-        ================================================== -->
-        <section class="shopping-cart-section">
-            <div class="container">
-                <form class="checking-form">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <th>QR Code</th>
-                                    <th>Event Title</th>
-                                    <th>Date Created</th>
-                                    <th>Folder/Images</th>
-                                    <th>Action</th>
-                                </tr>
-                                {% for event_code in event_qrcodes %}
-                                <tr>
-                                    <td><img src="data:image/png;base64,{{ event_code.qr_img_data }}" alt=""></td>
-                                    <td>
-                                        <h2><a href="{% url 'event' event_credentials=event_code.event_instance.event_credentials secret_token=event_code.event_instance.secret_token %}">
-                                            {{ event_code.event_instance.event_name }}</h2>
-                                        </a>
-                                    </td>
-                                    <td>{{ event_code.event_instance.created|date }}</td>
-                                    <td>{{ event_code.event_instance.num_folders }} / {{ event_code.event_instance.num_photos }}</td>
-                                    <td>
-                                        <a class="remove-item"  href="{% url 'download_qr_code' event_credentials=event_code.event_credentials_b64 secret_token=event_code.secret_token_b64 %}" target="_blank" download>
-                                        <i class="fa fa-download" aria-hidden="true" style="font-size: 20px; margin-right:10px;"></i>
-                                    </a>
-                                    <a href="" class="remove-item" data-toggle="modal" data-target="#delModal{{ forloop.counter }}" >
-                                        <i class="fa fa-times" style="font-size: 22px;"></i>
-                                    </a>
-                                    <div class="modal fade" id="delModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="delModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="delModalLabel">Delete Event</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Are you sure you want to delete? All the images will be completely lost</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a href="{% url 'delete_event' event_credentials=event_code.event_instance.event_credentials %}" class="btn btn-primary">Delete</a>
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                    </table>
-                </div>
-            </form>
-        </div>
-    </section>
-    <!-- End shopping-cart section -->
-    
-</div>
-    
-{% else %}
-<section class="services-section2">
+<section class="page-title-section">
     <div class="container">
-        <div class="title-section">
-            <h1 style="margin-bottom:20px;">You havent Created any events.</h1>
-            <a href="{% url 'create_event' %}" ><button class="inactive-button">Create Event</button></a>
+        <h1>Active Events</h1>
+        <a href="{% url 'create_event' %}" style="margin-top:20px;">
+            <span><button class="active-button" style="margin-top: 10px;">Create Event</button></span>
+        </a>
+    </div>
+</section>
+<section class="single-product-section" style="margin-top: 10px;">
+    <div class="container">
+        <div class="row" style="padding:10px;">
+            
+            {% for event_code in event_qrcodes %}
+            <div class="col-md-6" style="border-right: 0.5px solid black; border-bottom: 0.5px solid black; border-radius:5px; margin-top:10px;">
+                <div class="product-details">
+                    <div style="height: 100px;">
+
+                        <img src="data:image/png;base64,{{ event_code.qr_img_data }}" alt="" style="height: 100px;">
+                    </div>
+                    <span class="tag-item">{{ event_code.event_instance.created|date }}</span>
+                    <h1>{{ event_code.event_instance.event_name }}</h1>
+                    <p>
+
+                        <span class="tag-item">Folders / images - {{ event_code.event_instance.num_folders }} / {{ event_code.event_instance.num_photos }}</span>
+                    </p>
+                    <a id="copyLink">
+                        <i class="fa fa-share" aria-hidden="true" style="font-size: 20px; margin-right:10px;"></i>
+                    </a>
+                    <a href="{% url 'event' event_credentials=event_code.event_instance.event_credentials secret_token=event_code.event_instance.secret_token %}">
+                        <i class="fa fa-eye" aria-hidden="true" style="font-size: 20px; margin-right:10px;"></i>
+                    </a>
+                    <a class="remove-item"  href="{% url 'download_qr_code' event_credentials=event_code.event_credentials_b64 secret_token=event_code.secret_token_b64 %}" target="_blank" download>
+                        <i class="fa fa-download" aria-hidden="true" style="font-size: 20px; margin-right:10px;"></i>
+                    </a>
+                    <a href="" class="remove-item" data-toggle="modal" data-target="#delModal{{ forloop.counter }}" >
+                        <i class="fa fa-times" style="font-size: 22px;"></i>
+                    </a>
+                    <div class="modal fade" id="delModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="delModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="delModalLabel">Delete Event</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete? All the images will be completely lost</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{% url 'delete_event' event_credentials=event_code.event_instance.event_credentials %}" class="btn btn-primary">Delete</a>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="prod-list-item">
+                        <span>SHARE ON :</span>
+                        <ul class="product-social">
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        </ul>
+                    </div> -->
+
+                </div>
+
+            </div>
+            <script>
+                document.getElementById('copyLink').addEventListener('click', function() {
+                    // Get the current site's URL
+                    var currentSiteUrl = window.location.origin;
+            
+                    // Get the remaining part of the URL you want to copy
+                    var remainingUrl = "{% url 'event' event_credentials=event_code.event_instance.event_credentials secret_token=event_code.event_instance.secret_token %}";
+            
+                    // Concatenate the current site's URL with the remaining URL
+                    var fullUrl = currentSiteUrl + remainingUrl;
+            
+                    // Create a temporary input element
+                    var tempInput = document.createElement('input');
+                    tempInput.value = fullUrl;
+            
+                    // Append the input element to the body
+                    document.body.appendChild(tempInput);
+            
+                    // Select the text in the input element
+                    tempInput.select();
+                    tempInput.setSelectionRange(0, 99999); /* For mobile devices */
+            
+                    // Copy the text to the clipboard
+                    document.execCommand('copy');
+            
+                    // Remove the temporary input element
+                    document.body.removeChild(tempInput);
+            
+                    // Optionally, provide some feedback to the user (you can customize this part)
+                    alert('Link copied to clipboard!');
+                });
+            </script>
+
+            {% endfor %}
         </div>
     </div>
 </section>
-{% endif %}
+
 {% include 'footer.html'   %}
