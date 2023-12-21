@@ -58,7 +58,6 @@ def dashboard(request):
             'event_credentials_b64': event_credentials_b64,
             'secret_token_b64': secret_token_b64,
         })
-    messages.success(request, 'Hi')
     context = {
         'event_qrcodes': event_qrcodes,
     }
