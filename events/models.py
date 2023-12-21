@@ -19,6 +19,7 @@ def generate_secret_token():
     return str(uuid.uuid4())
 
 class Event(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)
     event_name = models.CharField(max_length=255)
     location = models.CharField(max_length=100, null=True, blank= True)
     remarks = models.CharField(max_length=100, null=True, blank= True)

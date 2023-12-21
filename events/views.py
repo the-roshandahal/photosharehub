@@ -24,8 +24,13 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def dashboard(request):
-    events = Event.objects.annotate(num_photos=Count('folder__photo'),
-                                    num_folders=Count('folder', distinct=True)).all()
+    logged_in_user = User.objects.get(username = request.user)
+    events = Event.objects.filter(user=logged_in_user).annotate(num_photos=Count('folder__photo'),num_folders=Count('folder', distinct=True)).all()
+    
+    # logged_in_user = User.objects.get(username = request.user)
+    # print(logged_in_user)
+    # events = Event.objects.annotate(num_photos=Count('folder__photo'),num_folders=Count('folder', distinct=True)).all()
+    
     current_site = get_current_site(request)
 
     event_qrcodes = []
