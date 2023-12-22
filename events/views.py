@@ -1,3 +1,5 @@
+import os
+import zipfile
 from features.models import *
 from django.http import HttpResponse
 
@@ -26,10 +28,6 @@ from django.contrib.auth.decorators import login_required
 def dashboard(request):
     logged_in_user = User.objects.get(username = request.user)
     events = Event.objects.filter(user=logged_in_user).annotate(num_photos=Count('folder__photo'),num_folders=Count('folder', distinct=True)).all()
-    
-    # logged_in_user = User.objects.get(username = request.user)
-    # print(logged_in_user)
-    # events = Event.objects.annotate(num_photos=Count('folder__photo'),num_folders=Count('folder', distinct=True)).all()
     
     current_site = get_current_site(request)
 
@@ -105,36 +103,6 @@ def event(request, event_credentials, secret_token):
 
 
 
-
-# @login_required
-# def download_qr_code(request, event_credentials, secret_token):
-#     event = get_object_or_404(Event, event_credentials=urlsafe_base64_decode(event_credentials).decode(),
-#                                secret_token=urlsafe_base64_decode(secret_token).decode())
-    
-#     company = Company.objects.all().order_by('-created').first()
-#     # here is the company logo iwant in the center of qr code 
-#     logo = company.logo
-
-#     qr = qrcode.QRCode(
-#         version=1,
-#         error_correction=qrcode.constants.ERROR_CORRECT_L,
-#         box_size=10,
-#         border=4,
-#     )
-#     event_url = f"{request.scheme}://{request.get_host()}{reverse('event', args=[event.event_credentials, event.secret_token])}"
-
-#     qr.add_data(event_url)
-#     qr.make(fit=True)
-
-#     buffer = BytesIO()
-#     qr_img = qr.make_image(fill_color="black", back_color="white")
-#     qr_img.save(buffer, format="PNG")
-#     image_data = buffer.getvalue()
-
-#     response = HttpResponse(image_data, content_type='image/png')
-#     response['Content-Disposition'] = f'attachment; filename="{event.event_name}_qr_code.png"'
-
-#     return response
 @login_required
 def download_qr_code(request, event_credentials, secret_token):
     event = get_object_or_404(Event, event_credentials=urlsafe_base64_decode(event_credentials).decode(),
@@ -271,4 +239,25 @@ def all_images(request, event_credentials):
     photo_count = photos.count()
     return render(request, 'all_images.html', {'event':event, 'photos': photos, 'photo_count': photo_count})
 
+import shutil
 
+def download_all_files(request, event_credentials):
+    event = get_object_or_404(Event, event_credentials=event_credentials)
+
+    temp_directory = "/path/to/temp/directory"
+    os.makedirs(temp_directory, exist_ok=True)
+
+    zip_file_path = os.path.join(temp_directory, f"{event.event_name}_files.zip")
+    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
+        for folder in Folder.objects.filter(event=event):
+            for photo in Photo.objects.filter(folder=folder):
+                file_path = photo.image.path
+                zipf.write(file_path, os.path.basename(file_path))
+
+    with open(zip_file_path, 'rb') as zip_file:
+        response = HttpResponse(zip_file.read(), content_type='application/zip')
+        response['Content-Disposition'] = f'attachment; filename="{event.event_name}_files.zip"'
+
+    shutil.rmtree(temp_directory)
+
+    return response

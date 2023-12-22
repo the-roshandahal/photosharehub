@@ -18,7 +18,7 @@ urlpatterns = [
     path('unsave_event/<str:event_credentials>', views.unsave_event, name='unsave_event'),
     path('all_images/<str:event_credentials>', views.all_images, name='all_images'),
     path('saved_events/<int:id>', views.saved_events, name='saved_events'),
-
+    path('download_all_files/<str:event_credentials>/', views.download_all_files, name='download_all_files'),
 
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     re_path(r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT}),

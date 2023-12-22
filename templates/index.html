@@ -1,54 +1,112 @@
 {% load static %}{% include 'header.html' %}
 <div id="content">
-    <section class="main-title">
-        <div class="container">
-            <h1>Hello</h1>
-            <h2>Welcome to photo share hub</h2>
+    <section class="about-me-section">
+        <div class="container-fluid">
+            <div class="about-me-box">
+                
+                <div class="my-identity">
+                    <img src="{% static 'scan.png' %}" alt="">
+                </div>
+
+                <div class="personal-info">
+                    <h1>Welcome to <br>photo share hub</h1>
+                    <p>Never Miss Moments is a one-click access online gallery for all your guests to upload all their amazing photos & videos of your special day.</p>
+                    <p>Your wedding guests take so many photos & videos throughout your wedding day, now there is a place to store them all for a lifetime </p>
+                    <div >
+                        <a href="{% url 'user_login' %}" style="margin-right:20px;"><button class="active-button">Login</button></a>
+                        <a href="{% url 'user_login' %}"><button class="inactive-button">Sign Up</button></a>
+                      </div>
+                </div>
+
+            </div>
         </div>
     </section>
-    <!-- services section -->
-    <section class="services-section">
+    <section class="services-section padd-top">
         <div class="container">
-            <h1 class="services-title">
-                We simplify the process of capturing and sharing <br>moments with your loved ones.
-            </h1>
-            <div class="button-container" style="margin-bottom:50px;">
-                <a href="{% url 'user_login' %}" style="margin-right:20px;"><button class="active-button">Login</button></a>
-                <a href="{% url 'user_login' %}"><button class="inactive-button">Sign Up</button></a>
-              </div>
-            
-            <!-- <div class="center-button">
-                <a href="#">Discover Us</a>
-            </div> -->
-        </div>
-    </section>
-    <!-- End services section -->
-    <section class="testimonial-section">
-        <div class="container">
-            <div class="services-box" style="color:white; padding:20px 0 20px 0;">
+            <div class="services-box">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="services-post">
                             <h2><span>01/</span> Click</h2>
-                            <p style="color:white;">Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
+                            <p>Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapibus id, mattis vel, nisi. Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. </p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="services-post">
                             <h2><span>02/</span> Scan</h2>
-                            <p style="color:white;">Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
+                            <p>Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. Nullam mollis. Ut justo. Suspendisse potenti.</p>
+                            <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero,</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="services-post">
                             <h2><span>03/</span> Share</h2>
-                            <p style="color:white;">Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel,</p>
+                            <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus adipiscing, commodo quis, gravida id, est. Sed lectus. </p>
                         </div>
                     </div>
                 </div>
             </div>
-            
+        </div>
+    </section>
+    <section class="team-section">
+        <div class="container-fluid">
+            <div class="title-section">
+                <a href="{% url 'user_login' %}"><button class="active-button">Get Yours Today</button></a>
 
+            </div>
+            
+        </div>
+    </section>
+
+
+    <section class="package-section">
+        <div class="container">
+            <div class="title-section white">
+                <h1>Our Packages</h1>
+            </div>
+            <div class="package-box">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="package-item portrait">
+                            <h2>QR code with <br>Our Logo</h2>
+                            <h3>Rs. 5,000</h3>
+                            <ul>
+                                <li>High resolution images.</li>
+                                <li>Unlimited Images</li>
+                                <li>Unlimited Participants</li>
+                                <li>30 days validity</li>
+                            </ul>
+                            <a href="#"><span>Order Now</span></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="package-item wedding">
+                            <h2>QR code with <br>no Logo</h2>
+                            <h3>Rs. 7,500</h3>
+                            <ul>
+                                <li>High resolution images.</li>
+                                <li>Unlimited Images</li>
+                                <li>Unlimited Participants</li>
+                                <li>30 days validity</li>
+                            </ul>
+                            <a href="#"><span>Order Now</span></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="package-item creative">
+                            <h2>QR code with <br>Your Logo</h2>
+                            <h3>Rs. 10,000</h3>
+                            <ul>
+                                <li>High resolution images.</li>
+                                <li>Unlimited Images</li>
+                                <li>Unlimited Participants</li>
+                                <li>45 days validity</li>
+                            </ul>
+                            <a href="#"><span>Order Now</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>

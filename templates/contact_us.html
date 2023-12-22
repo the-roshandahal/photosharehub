@@ -1,0 +1,84 @@
+{% include 'header.html'   %}
+<div id="content" class="with-paddings">
+    <!-- End page-title section -->
+    <style>
+        .map{
+            margin: 100px 0 0 100px;
+        }
+        iframe{
+            width:100%;
+            height:450px;
+        }
+        @media only screen and (max-width: 767px) {
+            .map{
+                margin: 0px;
+            }
+        }
+        
+        /* Tablet styles (768px to 1023px) */
+        @media only screen and (min-width: 768px) and (max-width: 1023px) {
+            .map{
+                margin: 0px;
+            }
+            
+        }
+
+           
+        
+    </style>
+    <!-- contact section -->
+    <section class="contact-section" style="margin-bottom: 40px;">
+        <div class="contact-form-part" >
+            <h1>Get in touch</h1>
+            <p>Feel free to reach out to us—we'd love to hear from you! Whether you have questions, feedback, or just want to say hello, our team is here and ready to assist. </p>
+            <form id="contact-form">
+                <input name="name" id="name" type="text" placeholder="Name">
+                <input name="mail" id="mail" type="text" placeholder="Email">
+                <textarea name="comment" id="comment" placeholder="Message"></textarea>
+                <input type="submit" id="submit_contact" value="Submit">
+                <div id="msg" class="message"></div>
+            </form>
+        </div>
+        <div class="map-holder">
+            <div class="map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3421.073008934744!2d85.36312215269677!3d27.734351210354514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1be6f4968335%3A0x6be584a99deb66de!2sTrijyoti%20Secondary%20School!5e0!3m2!1sen!2snp!4v1703221454160!5m2!1sen!2snp"  style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>        
+            </div>
+        </div>
+
+    </section>
+    <!-- End contact section -->
+
+    <!-- contact-info section -->
+    <section class="contact-info-section">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="info-data">
+                        <i class="fa fa-map-marker"></i>
+                        <h3>Our Location</h3>
+                        <p>Baneshwor-10<br> Kathmandu, Nepal</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-data">
+                        <i class="fa fa-phone"></i>
+                        <h3>Our Phone</h3>
+                        <p>+977 9823206688 <br>+977 9823206688</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-data">
+                        <i class="fa fa-envelope-o"></i>
+                        <h3>Our Email</h3>
+                        <p>roshandahal.r@gmail.com<br>roshandahal.rr@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- End contact-info section -->
+
+</div>
+{% include 'footer.html'   %}
