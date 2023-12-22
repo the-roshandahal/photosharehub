@@ -70,11 +70,12 @@ def dashboard(request):
 
 @login_required
 def create_event(request):
+    logged_in_user = User.objects.get(username =request.user)
     if request.method == 'POST':
         event_name = request.POST['event_name']
         location = request.POST['location']
         remarks = request.POST['remarks']
-        event_obj = Event.objects.create(event_name = event_name, location = location, remarks = remarks)
+        event_obj = Event.objects.create(user=logged_in_user,event_name = event_name, location = location, remarks = remarks)
         event_obj.save()
         return redirect('dashboard')
     else:
