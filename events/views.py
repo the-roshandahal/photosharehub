@@ -240,24 +240,29 @@ def all_images(request, event_credentials):
     photo_count = photos.count()
     return render(request, 'all_images.html', {'event':event, 'photos': photos, 'photo_count': photo_count})
 
-
-from django.http import FileResponse
-from zipfile import ZipFile
-from io import BytesIO
+import zipfile
+from django.http import StreamingHttpResponse
+from wsgiref.util import FileWrapper
 
 def download_all_files(request, event_credentials):
     event = get_object_or_404(Event, event_credentials=event_credentials)
 
-    in_memory_zip = BytesIO()
-    with ZipFile(in_memory_zip, 'w') as zipf:
+    response = StreamingHttpResponse(
+        FileWrapper(create_zip_stream(event)),
+        content_type='application/zip'
+    )
+    response['Content-Disposition'] = f'attachment; filename="{event.event_name}_files.zip"'
+    return response
+
+def create_zip_stream(event):
+    buffer = BytesIO()
+    with zipfile.ZipFile(buffer, 'w') as zipf:
         for folder in Folder.objects.filter(event=event):
             for photo in Photo.objects.filter(folder=folder):
                 file_path = photo.image.path
                 zipf.write(file_path, os.path.basename(file_path))
+    buffer.seek(0)
+    return buffer
 
-    in_memory_zip.seek(0)
-    response = FileResponse(in_memory_zip, content_type='application/zip')
-    response['Content-Disposition'] = f'attachment; filename="{event.event_name}_files.zip"'
 
-    return response
 
