@@ -241,37 +241,23 @@ def all_images(request, event_credentials):
     return render(request, 'all_images.html', {'event':event, 'photos': photos, 'photo_count': photo_count})
 
 
+from django.http import FileResponse
+from zipfile import ZipFile
+from io import BytesIO
+
 def download_all_files(request, event_credentials):
     event = get_object_or_404(Event, event_credentials=event_credentials)
 
-    temp_directory = "/temp"
-    os.makedirs(temp_directory, exist_ok=True)
-
-    try:
-        # Create a temporary directory to store files
-        temp_dir = os.path.join(temp_directory, 'temp')
-        os.makedirs(temp_dir, exist_ok=True)
-
-        # Copy all files to the temporary directory
+    in_memory_zip = BytesIO()
+    with ZipFile(in_memory_zip, 'w') as zipf:
         for folder in Folder.objects.filter(event=event):
             for photo in Photo.objects.filter(folder=folder):
                 file_path = photo.image.path
-                shutil.copy(file_path, temp_dir)
+                zipf.write(file_path, os.path.basename(file_path))
 
-        # Create a zip file using shutil.make_archive
-        zip_file_path = shutil.make_archive(os.path.join(temp_directory, f"{event.event_name}_files"), 'zip', temp_dir)
-
-        with open(zip_file_path, 'rb') as zip_file:
-            response = HttpResponse(zip_file.read(), content_type='application/zip')
-            response['Content-Disposition'] = f'attachment; filename="{event.event_name}_files.zip"'
-
-    except Exception as e:
-        # Log the exception for debugging
-        print(f"Error: {e}")
-        response = HttpResponse("Internal Server Error", status=500)
-
-    finally:
-        # Clean up temporary directories
-        shutil.rmtree(temp_directory)
+    in_memory_zip.seek(0)
+    response = FileResponse(in_memory_zip, content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename="{event.event_name}_files.zip"'
 
     return response
+
