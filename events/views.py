@@ -1,3 +1,4 @@
+import shutil
 import os
 import zipfile
 from features.models import *
@@ -239,25 +240,35 @@ def all_images(request, event_credentials):
     photo_count = photos.count()
     return render(request, 'all_images.html', {'event':event, 'photos': photos, 'photo_count': photo_count})
 
-import shutil
+
 
 def download_all_files(request, event_credentials):
     event = get_object_or_404(Event, event_credentials=event_credentials)
 
-    temp_directory = "/path/to/temp/directory"
+    temp_directory = "/temp"
     os.makedirs(temp_directory, exist_ok=True)
 
-    zip_file_path = os.path.join(temp_directory, f"{event.event_name}_files.zip")
-    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
-        for folder in Folder.objects.filter(event=event):
-            for photo in Photo.objects.filter(folder=folder):
-                file_path = photo.image.path
-                zipf.write(file_path, os.path.basename(file_path))
+    zip_file_path = os.path.join(temp_directory, f"{event.event_name}_files")
+    
+    # Create a temporary directory to store files
+    temp_dir = os.path.join(temp_directory, 'temp')
+    os.makedirs(temp_dir, exist_ok=True)
 
-    with open(zip_file_path, 'rb') as zip_file:
+    # Copy all files to the temporary directory
+    for folder in Folder.objects.filter(event=event):
+        for photo in Photo.objects.filter(folder=folder):
+            file_path = photo.image.path
+            shutil.copy(file_path, temp_dir)
+
+    # Create a zip file using shutil.make_archive
+    shutil.make_archive(zip_file_path, 'zip', temp_dir)
+
+    with open(zip_file_path + ".zip", 'rb') as zip_file:
         response = HttpResponse(zip_file.read(), content_type='application/zip')
         response['Content-Disposition'] = f'attachment; filename="{event.event_name}_files.zip"'
 
+    # Clean up temporary directories
     shutil.rmtree(temp_directory)
 
     return response
+
