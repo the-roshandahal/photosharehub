@@ -19,6 +19,7 @@
                         <img src="data:image/png;base64,{{ event_code.qr_img_data }}" alt="" style="height: 100px;">
                     </div>
                     <span class="tag-item">{{ event_code.event_instance.created|date }}</span>
+                    <p class="tag-item">Active Status - {{ event_code.event_instance.status }}</p>
                     <h1>{{ event_code.event_instance.event_name }}</h1>
                     <p>
 
